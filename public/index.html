@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Auth</title>
+    <style>
+        body {
+            min-width: 320px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type=text],
+        select,
+        textarea,
+        button,
+        .btn {
+            padding: 10px;
+            border: 2px solid lightgray;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            background: #fcfcfc;
+        }
+
+        button,
+        .btn {
+            background: #cccccc;
+            text-decoration: none;
+            display: block;
+            color: black;
+            text-align: center;
+            font-size: 0.8rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .btn:hover,
+        .btn:active,
+        button:hover,
+        button:active {
+            opacity: 0.7;
+        }
+
+        .container {
+            min-width: 300px;
+            width: 50%;
+        }
+
+        @media(max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 0 10px;
+            }
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .login {
+            margin-right: 10px;
+        }
+
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-form__title {
+            margin: 30px auto 10px;
+        }
+
+        .login-form__list {
+            list-style: none;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-width: 300px;
+            padding: 0;
+        }
+
+
+        .login-form__item {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 0;
+        }
+
+
+        .login-form__item input {
+            height: 20px;
+            padding: 10px;
+        }
+
+        .login-form__item label {
+            margin-top: 20px;
+        }
+
+
+        .login-form__btns {
+            display: flex;
+        }
+
+        .login-form__btn {
+            min-width: 235px;
+            margin: 10px auto;
+            padding: 10px 50px;
+            background: rgba(38, 175, 20, 0.88);
+            color: white;
+            border-radius: 30px;
+            border-color: rgba(38, 175, 20, 0.88);
+        }
+
+        .login-form__link {
+            margin: 10px auto;
+            padding: 10px 50px;
+            background: rgba(211, 0, 11, 0.88);
+            color: white;
+            border-radius: 30px;
+            border-color: rgba(211, 0, 11, 0.88);
+            text-decoration: none;
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="login-form">
+        <h1 class="login-form__title">Авторизация</h1>
+        <ul class="login-form__list">
+            <li class="login-form__item">
+                <input type="text" placeholder="Логин" required>
+            </li>
+            <li class="login-form__item">
+                <input type="text" placeholder="Пароль" required>
+            </li>
+        </ul>
+        <div class="login-form__btns">
+            <button class="login-form__btn" type="submit">Войти</button>
+            <p class="login-form__status"></p>
+            <a href="/registration" class="login-form__link">Зарегистрироваться</a>
+        </div>
+    </form>
+</div>
+<script>
+    (()=> {
+        const btn = document.querySelector('.login-form__btn');
+        const form = document.querySelector('.login-form');
+        const status = document.querySelector('.login-form__status');
+
+        if (!btn && !form && !status) {
+            return;
+        }
+
+        form.addEventListener('submit', (evt) => {
+            evt.preventDefault();
+
+            const login = form.querySelector('#login').value;
+            const password = form.querySelector('#password').value;
+            const url = '/login';
+
+            const data = {
+                login,
+                password
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((res)=> res.json())
+                .then((res)=> {
+                    if (res === 'ok') {
+                        window.location.href = '/'
+                    } else {
+                        status.textContent = res;
+                    }
+                })
+                .catch((err)=>{status.textContent = err;});
+        })
+
+    })();
+</script>
+</body>
+</html>
